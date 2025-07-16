@@ -35,52 +35,53 @@ const handleSubmit = async (e: React.FormEvent) => {
     setError('');
     if (!validate()) return;
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    // Sign in using Supabase Auth
+    const { data, error: loginError } = await supabase.auth.signInWithPassword({
       email: form.email,
       password: form.password,
     });
 
-    if (error || !data.user) {
+    if (loginError || !data.user) {
       setError('Invalid email or password.');
       return;
     }
 
-    // Fetch user role
+    const email = form.email;
+
+    // Try to get user role from `users` table
     const { data: userData, error: roleError } = await supabase
       .from('users')
       .select('role')
-      .eq('email', form.email)
-      .single();
+      .eq('email', email)
+      .maybeSingle(); // ✅ Don't throw on empty result
 
-    if (roleError || !userData) {
-      console.error('Failed to fetch role:', roleError);
-      setError('Failed to fetch user role');
+    // If user not found, insert it with default role
+    if (!userData) {
+      const insertRes = await supabase
+        .from('users')
+        .insert([{ email, role: 'user' }])
+        .select()
+        .maybeSingle();
+
+      if (insertRes.error || !insertRes.data) {
+        console.error('Insert failed:', insertRes.error);
+        setError('Failed to create user profile.');
+        return;
+      }
+
+      localStorage.setItem('role', insertRes.data.role);
+      localStorage.setItem('email', email);
+      router.push('/dashboard');
       return;
     }
 
+    // If user exists, store role and email
     localStorage.setItem('role', userData.role);
-
+    localStorage.setItem('email', email);
     router.push('/dashboard');
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setError('');
-  // if (!validate()) return;
-
-  //   const { error } = await supabase.auth.signInWithPassword({
-  //     email: form.email,
-  //     password: form.password,
-  //   });
-
-  //   if (error) {
-  //     setError('Invalid email or password.');
-  //   } else {
-  //     router.push('/dashboard');
-  //   }
-  // };
-
-  return (
+ return (
 
     <div className="min-h-100 flex items-center justify-center bg-gradient-to-r from-red-500 to-purple-100 p-8">
       <div className="w-100 max-w-md bg-white rounded-xl p-6 shadow-md">

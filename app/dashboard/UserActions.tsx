@@ -5,11 +5,12 @@ import EditUserModal from './EditUserModal';
 
 interface UserActionsProps {
   userId: string;
-  role?: string | null; 
+  userEmail: string;
+  role?: string | null;
+  loggedInEmail?: string | null;
 }
 
-
-export default function UserActions({ userId, role }: UserActionsProps) {
+export default function UserActions({ userId, userEmail, role, loggedInEmail }: UserActionsProps) {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
 
@@ -26,31 +27,35 @@ export default function UserActions({ userId, role }: UserActionsProps) {
     }
   };
 
-   const isAdmin = role === 'admin';
+  const isAdmin = role === 'admin';
+  const isSelf = userEmail === loggedInEmail;
+
+  const canEdit = isAdmin || isSelf;
+  const canDelete = isAdmin;
 
   return (
     <>
       {/* Edit button */}
       <button
         type="button"
-        onClick={() => isAdmin && setShowModal(true)}
-        className={`mr-2 ${isAdmin ? 'text-blue-600 hover:underline' : 'text-gray-400 cursor-not-allowed'}`}
-        disabled={!isAdmin}
+        onClick={() => canEdit && setShowModal(true)}
+        className={`mr-2 ${canEdit ? 'text-blue-600 hover:underline' : 'text-gray-400 cursor-not-allowed'}`}
+        disabled={!canEdit}
         style={{ marginLeft: '20px' }}
       >
         Edit
       </button>
 
-      {/* Delete button */}
+      {/* Delete button (only admins) */}
       <button
         type="button"
-        onClick={isAdmin ? handleDelete : undefined}
-        className={`text-red-600 hover:underline ${!isAdmin ? 'text-gray-400 cursor-not-allowed' : ''}`}
-        disabled={!isAdmin}
+        onClick={canDelete ? handleDelete : undefined}
+        className={`text-red-600 hover:underline ${!canDelete ? 'text-gray-400 cursor-not-allowed' : ''}`}
+        disabled={!canDelete}
         style={{ marginLeft: '20px' }}
       >
         Delete
-      </button> 
+      </button>
 
       {/* Modal */}
       <EditUserModal
