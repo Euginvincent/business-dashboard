@@ -71,7 +71,7 @@ export default async function Dashboard() {
                 <td className="px-4 py-2 border">{u.dob}</td>
                 <td className="px-4 py-2 border">{u.role}</td>
                 <td className="px-4 py-2 border">
-                  <UserActionsWrapper userId={u.id} />
+                  <UserActionsWrapper userId={u.id} userEmail={u.email} />
                 </td>
               </tr>
             ))}
