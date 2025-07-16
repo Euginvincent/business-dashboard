@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+npx drizzle-kit push
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* First User will be Registered with valid email
+    All the fields are validation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* Once you register you get the confirmation mail
 
-## Learn More
+* just Click on open the mail for confirmation
 
-To learn more about Next.js, take a look at the following resources:
+* You can get the Token
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* Then you can login with credentials
+   Email and password field with validations
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* once you login you can see the dashboard page along with role based access for Edit Delete   
 
-## Deploy on Vercel
+* If its admin they can allow to Edit and Delete all the users
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* Or else if you are user you can see the user detail and you can edit only your profile
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Technology 
+
+ Next.js (App Router + SSR)
+ Supabase (Auth + PostgreSQL)
+ Supabase CLI
+ Drizzle ORM
+ Tailwind 
+
+Following by below the instruction
+ Full user authentication (Supabase)
+ Role-based access control (Admin/User)
+ CRUD APIs using Drizzle ORM
+ Supabase-managed database with migrations
+ Frontend interactions using Axios
+ Server-side authentication using cookies (no token exposure)
+
+Use Case
+You are building a business dashboard where:
+ Users can sign up and log in.
+ Each user belongs to a role: either admin or user
+ Admins can manage a list of businesses (CRUD).
+ Users can only view their own business profile.
+
+
+
+
